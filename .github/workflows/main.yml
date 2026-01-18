@@ -20,6 +20,12 @@ jobs:
         run: |
           pip install pandas pyarrow pyspark
 
+      - name: Generate Raw Data
+        run: python generate_data.py
+
+      - name: Process Infrastructure (Spark)
+        run: python process_infrastructure.py
+
       - name: Run Risk Engine Test
         run: python risk_engine.py
 
@@ -33,10 +39,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # THIS IS THE FIX: Convert the repo name to lowercase and save it
+      - name: Lowercase Repository Name
+        run: |
+          echo "IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}:latest .
-          docker push ghcr.io/${{ github.repository }}:latest
+          docker build -t ghcr.io/${{ env.IMAGE_NAME }}:latest .
+          docker push ghcr.io/${{ env.IMAGE_NAME }}:latest
