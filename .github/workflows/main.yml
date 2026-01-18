@@ -1,7 +1,7 @@
 # identity and Trigger
 # What it does: This is simply the name of the workflow.
 # Where it shows up: When you look at the "Actions" tab on GitHub, you will see this name. 
-# It helps you distinguish this job from others (e.g., you might have another job for "Daily Backups").
+# It helps you distinguish this job from others (e.g., you might have another job for "Daily Backups"). 
 
 name: Credit Risk CI and CD
 
